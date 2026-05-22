@@ -1,66 +1,154 @@
 # Josmary Pirela — Portfolio
 
-Portfolio interactivo cyber-retro: **React 19**, **Vite 6**, **Tailwind v4**, backend serverless en **Vercel** (Supabase, Resend, Telegram, Upstash).
+Portfolio interactivo con estética cyber-brutalist, construido para producción.
 
-**Dominio:** [josmarypirela.dev](https://josmarypirela.dev)
+**Producción:** [josmarypirela.dev](https://josmarypirela.dev)
 
-## Documentación
+![Vista previa del portfolio](public/portafolio-preview.png)
 
-| Archivo | Descripción |
-|---------|-------------|
-| [WALKTHROUGH.md](./WALKTHROUGH.md) | Estado del proyecto, pendientes y **stack tecnológico** |
-| [DOCUMENTACION.md](./DOCUMENTACION.md) | Arquitectura y estructura del código |
-| [INSTRUCCIONES_BACKEND.md](./INSTRUCCIONES_BACKEND.md) | API de contacto, Telegram, Supabase, rate limiting |
+---
 
-## Requisitos
+## Resumen
 
-- Node.js 18+
+Este proyecto es una cartera profesional que combina:
 
-## Desarrollo
+- UI interactiva y animaciones con `motion/react`
+- Renderizado estático multilingüe (`/` y `/en/`)
+- Backend serverless para formulario de contacto y Open Graph dinámico
+- Estrategias de accesibilidad y reducción de movimiento
+
+---
+
+## Features
+
+- Bilingual SEO-ready architecture (`/` y `/en/`)
+- Dynamic Open Graph generation con Edge Functions
+- UI interactiva accesible
+- Pipeline de contacto con rate limiting
+- Soporte para reduced motion
+- Lazy loading y code splitting
+
+---
+
+## Stack
+
+- React 19
+- TypeScript
+- Vite 6
+- Tailwind CSS v4
+- Vercel Functions
+- PostgreSQL (vía pg client, compatible con Supabase)
+- Upstash Redis
+- Resend
+
+---
+
+## Arquitectura
+
+El proyecto está dividido en tres capas principales:
+
+- Frontend estático (React + Vite)
+- Backend serverless (Vercel Functions)
+- Servicios externos (Supabase, Redis, Resend, Telegram)
+
+Prioridades del sistema:
+
+- SEO
+- rendimiento
+- accesibilidad
+- modularidad
+- experiencia interactiva ligera
+
+---
+
+## SEO
+
+El proyecto implementa:
+
+- renderizado estático bilingüe
+- canonical URLs
+- hreflang
+- Open Graph dinámico
+- sitemap y robots.txt
+
+---
+
+## Instalación local
 
 ```bash
+git clone https://github.com/josmarypirela/portfolio-v2.git
+cd portfolio-v2
 npm install
-npm run dev          # Solo frontend → http://localhost:3000
-npx vercel dev       # Frontend + /api/contact (recomendado para formulario)
+npm run dev
 ```
 
-## Variables de entorno
+El frontend estará disponible en `http://localhost:3000`.
 
-Copia `.env.example` a `.env` (y `.env.local` para Vite si aplica):
+Para probar funciones API:
 
 ```bash
-VITE_SITE_URL="https://josmarypirela.dev"
-DATABASE_URL="postgresql://..."
-RESEND_API_KEY="..."
-TELEGRAM_BOT_TOKEN="..."
-TELEGRAM_CHAT_ID="..."
-UPSTASH_REDIS_REST_URL="..."
-UPSTASH_REDIS_REST_TOKEN="..."
-RATE_LIMIT_MAX_PER_HOUR="10"
+npx vercel dev
 ```
 
-## Scripts
+---
 
-| Comando | Descripción |
-|---------|-------------|
-| `npm run dev` | Servidor Vite |
-| `npm run build` | Build → `dist/` (ES + `dist/en/`) |
-| `npm run preview` | Vista previa del build |
-| `npm run lint` | TypeScript (`tsc --noEmit`) |
+## Configuración mínima
 
-## Build multi-idioma
+Copia `.env.example` a `.env` y define las variables necesarias.
 
-El `vite.config.ts` define dos entradas:
+```bash
+cp .env.example .env
+```
 
-- `/` → `index.html` (español)
-- `/en/` → `en/index.html` (inglés)
+No almacenar credenciales en el repositorio.
 
-## Flujo de trabajo recomendado
+---
 
-Consulta `DOCUMENTACION.md` para el flujo de trabajo oficial del proyecto: desde definición y diseño hasta desarrollo, pruebas y despliegue.
+## Scripts útiles
 
-## Despliegue en Vercel
+| Comando           | Descripción                 |
+| ----------------- | --------------------------- |
+| `npm run dev`     | Servidor de desarrollo Vite |
+| `npm run build`   | Genera `dist/` y `dist/en/` |
+| `npm run preview` | Vista previa del build      |
+| `npm run lint`    | TypeScript check            |
 
-1. Conectar repositorio o `npx vercel --prod`
-2. Configurar variables del `.env.example` en el dashboard
-3. Añadir dominio `josmarypirela.dev` y DNS según el panel de Vercel
+---
+
+## Objetivo del proyecto
+
+Este portfolio fue construido como una exploración de:
+
+- interfaces interactivas
+- arquitectura frontend moderna
+- SEO técnico avanzado
+- experiencias visuales ligeras
+- integración fullstack sobre infraestructura serverless
+
+---
+
+## Licencia
+
+Uso personal y demostrativo.
+
+---
+
+## Estructura de documentación
+
+| Documento          | Propósito                          |
+| ------------------ | ---------------------------------- |
+| `README.md`        | Entrada principal del proyecto     |
+| `DOCUMENTACION.md` | Arquitectura y decisiones técnicas |
+
+---
+
+## Notas de despliegue
+
+- Vite maneja entradas `/` y `/en/`
+- OG dinámico generado en `/api/og`
+- API de contacto en `/api/contact`
+- Despliegue en Vercel
+
+```
+
+```

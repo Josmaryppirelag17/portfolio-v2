@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Josmary Pirela  Creative Full-Stack Developer">
+  <rect width="1200" height="630" fill="#111232"/>
+  <rect x="48" y="48" width="1104" height="534" fill="none" stroke="#18BEC7" stroke-width="4"/>
+  <text x="96" y="280" fill="#DBEAEC" font-family="system-ui,sans-serif" font-size="72" font-weight="800">JOSMARY PIRELA</text>
+  <text x="96" y="360" fill="#DCF10B" font-family="system-ui,sans-serif" font-size="36" font-weight="600">Creative Full-Stack Developer � React � Vite</text>
+  <text x="96" y="520" fill="#FD1EB1" font-family="monospace" font-size="24">josmary.dev</text>
+</svg>

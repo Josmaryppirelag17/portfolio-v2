@@ -1,0 +1,20 @@
+# Node modules and build output
+node_modules/
+build/
+dist/
+coverage/
+
+# OS and editor metadata
+.DS_Store
+*.log
+.vscode/
+
+# Local environment files
+.env*
+!.env.example
+
+# Vercel local metadata
+.vercel/
+
+# SSL certificate files for local development
+certs/

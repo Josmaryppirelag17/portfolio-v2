@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&family=Bungee+Spice&family=Bungee&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #111232;
+  --color-brand-pale: #DBEAEC;
+  --color-brand-cyan: #18BEC7;
+  --color-brand-pink: #FD1EB1;
+  --color-brand-lime: #DCF10B;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-heading: "Syne", sans-serif;
+  --font-display: "Bungee", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --animate-scanline: scanline 6s linear infinite;
+  --animate-cyber-pulse: cyber-pulse 2s ease-in-out infinite alternate;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-grid-move: grid-move 20s linear infinite;
+  --animate-hue-rotate: hue-rotate 10s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+@keyframes cyber-pulse {
+  0% { box-shadow: 0 0 10px rgba(253, 30, 177, 0.4), 0 0 20px rgba(253, 30, 177, 0.2); }
+  100% { box-shadow: 0 0 20px #FD1EB1, 0 0 40px rgba(253, 30, 177, 0.6); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes grid-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+@keyframes hue-rotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Custom cyberpunk grid utility */
+.cyber-grid {
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(to right, rgba(24, 190, 199, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(24, 190, 199, 0.06) 1px, transparent 1px);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #111232;
+}
+::-webkit-scrollbar-thumb {
+  background: #18BEC7;
+  border: 2px solid #111232;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FD1EB1;
+}
+
+/* Organic blobs & dynamic shapes */
+.glow-spot-pink {
+  filter: blur(120px);
+  background: radial-gradient(circle, #FD1EB1 0%, transparent 70%);
+}
+
+.glow-spot-cyan {
+  filter: blur(120px);
+  background: radial-gradient(circle, #18BEC7 0%, transparent 70%);
+}
+
+.glow-spot-lime {
+  filter: blur(120px);
+  background: radial-gradient(circle, #DCF10B 0%, transparent 70%);
+}
+
+/* Creative customized styling for interactive items */
+.neo-brutal-border {
+  border: 3px solid #111232;
+  box-shadow: 6px 6px 0px #111232;
+}
+
+.neo-brutal-border-pink {
+  border: 3px solid #111232;
+  box-shadow: 6px 6px 0px #FD1EB1;
+}
+
+.neo-brutal-border-cyan {
+  border: 3px solid #111232;
+  box-shadow: 6px 6px 0px #18BEC7;
+}
+
+.neo-brutal-border-lime {
+  border: 3px solid #111232;
+  box-shadow: 6px 6px 0px #DCF10B;
+}
+
+/* CRT monitor screen scanlines */
+.crt-overlay {
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 6px 100%;
+}
+
+/* ── prefers-reduced-motion: desactiva animaciones pesadas (SO / a11y) ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse,
+  .animate-ping,
+  .animate-float,
+  .animate-scanline,
+  .animate-cyber-pulse,
+  .animate-grid-move,
+  .animate-hue-rotate,
+  [class*="animate-"] {
+    animation: none !important;
+  }
+
+  .glow-spot-pink,
+  .glow-spot-cyan,
+  .glow-spot-lime {
+    filter: blur(80px);
+  }
+
+  .cyber-grid {
+    background-image: none;
+  }
+}
+
+html.reduce-motion-override *,
+html.reduce-motion-override *::before,
+html.reduce-motion-override *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+

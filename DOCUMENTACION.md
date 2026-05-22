@@ -1,215 +1,409 @@
-# Arquitectura del portfolio — josmarypirela.dev
+# Documentación técnica — portfolio-v2
 
-Guía técnica del cyber-portfolio de **Josmary Pirela**: frontend interactivo (React 19 + Vite 6), SEO multi-idioma con entradas estáticas, y backend serverless en Vercel.
-
-> **Estado del proyecto:** ver [WALKTHROUGH.md](./WALKTHROUGH.md) para checklist de lo completado y pendiente de deploy.
+Documento de arquitectura oficial para el portfolio de **Josmary Pirela**.
+Aquí se describe la estructura del proyecto, la estrategia SEO bilingüe, la arquitectura frontend/backend y las decisiones técnicas principales.
 
 ---
 
-## Estructura del repositorio
+# Architecture Overview
+
+El portfolio está estructurado como una aplicación web bilingüe orientada a producción compuesta por:
+
+- Un frontend estático construido con React y Vite
+- Funciones serverless desplegadas en Vercel
+- Servicios externos para persistencia, notificaciones y rate limiting
+
+El proyecto prioriza:
+
+- SEO
+- accesibilidad
+- rendimiento
+- modularidad
+- mantenibilidad
+- renderizado ligero
+
+---
+
+# Estructura del repositorio
 
 ```text
 portfolio-v2/
 ├── api/
-│   ├── contact.ts              # POST contacto (Vercel Function, Node)
-│   ├── og.tsx                  # OG image 1200×630 (Edge, @vercel/og)
+│   ├── contact.ts
+│   ├── og.tsx
 │   └── lib/
-│       └── rateLimit.ts        # Upstash Redis — límite por IP/hora
+│       └── rateLimit.ts
 ├── en/
-│   └── index.html              # Entrada build inglés (/en/)
+│   └── index.html
 ├── public/
 │   ├── favicon.svg
 │   ├── og-image.svg
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── src/
-│   ├── main.tsx                # React root + MotionConfig + ErrorBoundary
-│   ├── App.tsx                 # Layout, nav, lazy sections, Matrix easter egg
-│   ├── index.css               # Tailwind v4 + prefers-reduced-motion
-│   ├── LanguageContext.tsx     # i18n ES/EN + datos localizados
+│   ├── main.tsx
+│   ├── App.tsx
+│   ├── index.css
+│   ├── LanguageContext.tsx
 │   ├── types.ts
 │   ├── seo/
-│   │   ├── config.ts           # SITE_URL, pageUrl(/, /en/)
-│   │   ├── metadata.ts         # Títulos y descriptions por idioma
-│   │   └── applyHead.ts        # Meta dinámicos + pathname /en
+│   │   ├── config.ts
+│   │   ├── metadata.ts
+│   │   └── applyHead.ts
 │   ├── lib/
-│   │   └── cyberMessages.ts    # localStorage cyber_messages + demo admin
+│   │   └── cyberMessages.ts
 │   ├── hooks/
 │   │   └── usePrefersReducedMotion.ts
 │   └── components/
-│       ├── HeroPlayground.tsx      # LCP — canvas 3D (carga eager)
-│       ├── AboutSection.tsx        # Bio + CyberAvatar + consola (lazy)
+│       ├── HeroPlayground.tsx
+│       ├── AboutSection.tsx
 │       ├── ExperienceTimeline.tsx
 │       ├── ProjectsShowcase.tsx
 │       ├── InteractiveSkills.tsx
-│       ├── ContactTerminal.tsx     # Form → /api/contact + localStorage
-│       ├── AdminConsole.tsx        # guest/guest — lee cyber_messages
+│       ├── ContactTerminal.tsx
+│       ├── AdminConsole.tsx
 │       ├── CyberConsoleWidgets.tsx
 │       ├── CyberAvatar.tsx
 │       ├── InteractiveGrid.tsx
 │       ├── SoundEngine.ts
 │       ├── ErrorBoundary.tsx
-│       └── SectionFallback.tsx     # Suspense fallback
-├── index.html                  # Entrada build español (/)
-├── vite.config.ts              # Multi-page: main + en
-├── vercel.json                 # Functions, rewrites, maxDuration
+│       └── SectionFallback.tsx
+├── index.html
+├── vite.config.ts
+├── vercel.json
 ├── .env.example
-├── WALKTHROUGH.md              # Estado y tecnologías
-├── INSTRUCCIONES_BACKEND.md
-└── README.md
+├── README.md
+└── DOCUMENTACION.md
 ```
 
 ---
 
-## Flujo de trabajo del proyecto
-
-### 1. Definición y alcance
-- Objetivo principal: describir qué problema resuelve el proyecto y a qué usuario final está dirigido.
-- Entregables mínimos: sitio responsivo, formulario funcional, deploy en Vercel, documentación final.
-- Alcance: UI interactiva con React, proyecto multi-idioma opcional, backend serverless para contacto y OG dinámico.
-- Criterios de aceptación: carga rápida, navegación clara, validación de datos y despliegue estable.
-
-### 2. Planificación
-- Seleccionar stack tecnológico: React 19, Vite 6, TypeScript, Tailwind v4, Vercel, Supabase/Resend/Upstash si aplica.
-- Definir arquitectura: frontend estático + API serverless para contacto y OG, rutas `/` y `/en/`.
-- Crear estructura de carpetas, nombrar archivos principales y preparar el archivo `DOCUMENTACION.md`.
-- Preparar checklist de entregables para cada sprint o iteración.
-
-### 3. Diseño y prototipo
-- Bosquejar wireframes de secciones clave: hero, sobre mí, trayectoria, proyectos, habilidades y contacto.
-- Definir estilos base, paleta de colores y tipografías.
-- Validar diseño responsive en móvil y escritorio.
-- Determinar estados de carga, hover, foco y preferencia de movimiento reducido.
-
-### 4. Setup inicial
-- Inicializar repositorio Git y crear rama principal.
-- Instalar dependencias con `npm install`.
-- Crear `.env.example`, `README.md` y `DOCUMENTACION.md`.
-- Configurar `vite.config.ts` para build multi-página si se requiere multi-idioma.
-- Añadir `LanguageProvider` y sistema de traducción si aplica.
-
-### 5. Desarrollo iterativo
-- Construir primero el layout base y el hero creativo.
-- Agregar componentes por secciones: `AboutSection`, `ExperienceTimeline`, `ProjectsShowcase`, `InteractiveSkills`, `ContactTerminal`.
-- Usar `React.lazy()` y `Suspense` para secciones secundarias y optimizar el LCP.
-- Implementar backend API serverless, validación de formulario y pruebas de envío.
-- Mantener el código modular y documentado.
-
-### 6. Pruebas y QA
-- Ejecutar lint y TypeScript: `npm run lint`.
-- Verificar formulario, validación y respuesta de la API de contacto.
-- Probar `prefers-reduced-motion`, accesibilidad y navegación con teclado.
-- Revisar SEO básico: metatags, canonical, hreflang y OG dinámico.
-- Comprobar build final con `npm run build`.
-
-### 7. Despliegue y publicación
-- Publicar en Vercel con `npx vercel --prod`.
-- Configurar variables de entorno en Vercel a partir de `.env.example`.
-- Añadir dominio personalizado y verificar DNS.
-- Revisar la versión desplegada y el sitemap.
-
-### 8. Documentación oficial
-- Mantener `README.md` con instalación, build y deploy.
-- Documentar arquitectura, flujo y decisiones clave en `DOCUMENTACION.md`.
-- Registrar dependencias, variables y pasos de despliegue.
-- Añadir notas de mantenimiento y cambios importantes.
-
-### 9. Mantenimiento
-- Actualizar dependencias periódicamente.
-- Corregir bugs y mejorar la experiencia de usuario.
-- Añadir nuevos proyectos y secciones cuando haya material nuevo.
-- Usar este flujo de trabajo como guía para futuros proyectos.
-
----
+# Arquitectura principal
 
 ## Frontend
 
-### Stack
+El frontend está construido con:
 
-- **React 19** + **TypeScript** + **Vite 6**
-- **Tailwind CSS v4** (`@import "tailwindcss"`, variables en `@theme`)
-- **Motion** para transiciones; respeta `prefers-reduced-motion` vía `MotionConfig` y CSS global
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- Motion
+- Canvas 2D
 
-### Rendimiento (LCP)
+La aplicación utiliza:
 
-- **Hero** (`HeroPlayground`): importación síncrona — primer paint crítico.
-- **Resto de secciones**: `React.lazy()` + `Suspense` con `SectionFallback` (chunks separados en build).
-- Canvas del hero: si el usuario tiene movimiento reducido, un solo frame estático (sin `requestAnimationFrame` continuo).
-
-### Internacionalización
-
-- Rutas físicas: `/` (español), `/en/` (inglés).
-- `LanguageContext` + `src/seo/applyHead.ts` sincronizan `lang`, canonical, hreflang y JSON-LD.
-- Compatibilidad legacy: parámetro `?lang=` como fallback de lectura.
-
-### Componentes clave
-
-| Módulo | Función |
-|--------|---------|
-| `SoundEngine.ts` | Singleton Web Audio: osciladores, gain, estática de radio |
-| `HeroPlayground.tsx` | Proyección 3D en Canvas 2D (sin Three.js en hero) |
-| `CyberAvatar.tsx` | Avatar reactivo al cursor + `InteractiveGrid` |
-| `ContactTerminal.tsx` | Formulario, sintetizador, `POST /api/contact`, honeypot `fax` |
-| `AdminConsole.tsx` | Panel simulado; mensajes también en `localStorage` |
-| `ErrorBoundary.tsx` | Captura errores de render sin pantalla blanca |
-
-### Accesibilidad
-
-- `@media (prefers-reduced-motion: reduce)` en `index.css`
-- Clase `reduce-motion-override` en `<html>` cuando el hook detecta preferencia
-- Sintetizador de contacto: `aria-label`, `aria-pressed`, `role="group"`
-
-### Open Graph (Vercel Edge)
-
-- `api/og.tsx` genera PNG 1200×630 con `@vercel/og` (runtime edge).
-- Meta en HTML y `applyHead.ts` usan `https://josmarypirela.dev/api/og`.
-- `public/og-image.svg` queda como respaldo estático opcional.
+- arquitectura basada en componentes
+- lazy loading
+- animaciones desacopladas
+- renderizado interactivo en canvas
+- contenido bilingüe localizado
 
 ---
 
-## SEO
+## Capa SEO
 
-- Dos HTML estáticos en build (`dist/index.html`, `dist/en/index.html`) con meta y JSON-LD iniciales.
-- Actualización en cliente vía `applyHead(language)` al cambiar idioma.
-- `public/sitemap.xml` con URLs `/` y `/en/` + hreflang.
-- `VITE_SITE_URL` en `.env` para canonical y OG en builds.
+El SEO se maneja mediante:
 
----
-
-## Backend (`/api/contact`)
-
-Flujo de una petición `POST` válida:
-
-1. CORS y método
-2. **Rate limit** (Upstash, por IP, ventana 1 h)
-3. Honeypot `fax`
-4. Validación de campos
-5. INSERT en Supabase (`pg`)
-6. Email (Resend) + Telegram (opcional)
-
-Variables: ver [.env.example](./.env.example) e [INSTRUCCIONES_BACKEND.md](./INSTRUCCIONES_BACKEND.md). Email saliente: `RESEND_FROM` (dominio verificado en Resend).
+- generación estática multi-entrada
+- etiquetas canonical
+- sincronización hreflang
+- metadata Open Graph
+- JSON-LD estructurado
 
 ---
 
-## Despliegue (Vercel)
+## Backend serverless
 
-```bash
-npm run build          # Genera dist/ + dist/en/
-npx vercel dev         # Frontend + API local
-npx vercel --prod      # Producción
+La capa backend utiliza Vercel Functions para:
+
+- procesamiento del formulario de contacto
+- generación dinámica de Open Graph
+- rate limiting
+- notificaciones externas
+
+---
+
+## Infraestructura externa
+
+Servicios utilizados:
+
+- PostgreSQL (vía pg client, compatible con Supabase) → persistencia
+- Resend → envío de correos
+- Telegram Bot API → notificaciones
+- Upstash Redis → rate limiting por IP
+
+---
+
+# SEO bilingüe con SSG multi-entrada
+
+## Enfoque
+
+La solución utiliza dos páginas estáticas independientes:
+
+- `/` → español
+- `/en/` → inglés
+
+---
+
+## Implementación
+
+- `vite.config.ts` define las entradas estáticas para ambos idiomas
+- `LanguageContext.tsx` centraliza traducciones y contenido localizado
+- `applyHead.ts` sincroniza:
+  - `title`
+  - `description`
+  - `canonical`
+  - `hreflang`
+  - `og:url`
+  - imagen Open Graph dinámica
+
+---
+
+## Beneficios
+
+Este enfoque permite:
+
+- indexación localizada correcta
+- mejor compatibilidad SEO
+- metadatos consistentes
+- previews sociales diferenciados
+- carga inicial completamente estática
+
+---
+
+# Flujo del endpoint de contacto
+
+## Ciclo general
+
+### 1. Recepción de solicitud
+
+- Validación de método HTTP
+- Configuración CORS
+- Rechazo temprano de rutas inválidas
+
+---
+
+### 2. Validación y saneamiento
+
+- Honeypot (`fax`) para bots simples
+- Validación de nombre, email y mensaje
+- Filtrado de entradas inesperadas
+
+---
+
+### 3. Rate limiting
+
+- Verificación por IP mediante Upstash Redis
+- Respuesta `429` con `Retry-After` si se excede el límite
+
+---
+
+### 4. Persistencia segura
+
+- Inserción del mensaje en Supabase PostgreSQL
+- Uso de consultas parametrizadas
+- Sin concatenación SQL insegura
+
+---
+
+### 5. Notificaciones externas
+
+Tras persistencia exitosa:
+
+- envío de email mediante Resend
+- envío opcional de notificación Telegram
+
+---
+
+### 6. Respuesta al cliente
+
+El endpoint devuelve:
+
+- estado de éxito
+- estado de error controlado
+- mensajes internos ocultos al cliente
+
+---
+
+# Flujo de datos
+
+```text
+Client Browser
+    ↓
+ContactTerminal.tsx
+    ↓
+POST /api/contact
+    ↓
+Input Validation
+    ↓
+Honeypot Check
+    ↓
+Rate Limit Verification (Upstash Redis)
+    ↓
+Supabase PostgreSQL Persistence
+    ↓
+Resend Email Notification
+    ↓
+Telegram Bot Notification
+    ↓
+JSON Response to Client
 ```
 
-`vercel.json` define:
+---
 
-- `maxDuration: 30` en `api/contact.ts`
-- Rewrites: `/api/*` → funciones; `/en/*` → `en/index.html`; resto → `index.html`
+# Decisiones técnicas
+
+## ¿Por qué Canvas 2D en lugar de Three.js?
+
+Three.js fue eliminado para reducir:
+
+- tamaño del bundle
+- carga GPU innecesaria
+- peso inicial de la aplicación
+
+Los efectos visuales requeridos podían resolverse mediante proyección matemática personalizada usando Canvas 2D.
 
 ---
 
-## Hoja de ruta (ideas futuras)
+## ¿Por qué SSG multi-página en lugar de SPA pura?
 
-- [ ] Reverb espacial en `SoundEngine` (`ConvolverNode`)
-- [ ] FFT → deformación de vértices en hero
-- [ ] Navegación solo-teclado completa en todo el sitio (más allá del sintetizador)
-- [ ] OG por idioma (variantes ES/EN en `/api/og`)
-- [ ] Verificar dominio en Resend (`hola@josmarypirela.dev`)
+El proyecto utiliza entradas estáticas independientes para:
+
+- `/`
+- `/en/`
+
+Esto mejora:
+
+- crawlabilidad
+- indexación localizada
+- consistencia SEO
+- compatibilidad social
+
+---
+
+## ¿Por qué Edge Functions para Open Graph?
+
+`/api/og` utiliza Vercel Edge Functions para:
+
+- reducir latencia
+- mejorar velocidad de generación OG
+- optimizar caché de previews sociales
+
+---
+
+# Estrategia de rendimiento
+
+Optimizaciones implementadas:
+
+- lazy loading en secciones no críticas
+- bundle splitting
+- soporte reduced motion
+- Canvas 2D lightweight
+- HTML estático bilingüe
+- caché Edge para Open Graph
+- eliminación de dependencias innecesarias
+
+---
+
+# Estrategia de accesibilidad
+
+Consideraciones aplicadas:
+
+- soporte `prefers-reduced-motion`
+- controles accesibles mediante teclado
+- `aria-label`
+- `aria-pressed`
+- agrupación semántica
+- contraste consistente
+- estados de foco visibles
+
+---
+
+# Seguridad
+
+El endpoint de contacto incluye:
+
+- validación CORS
+- honeypot anti-bot
+- sanitización de entradas
+- rate limiting por IP
+- consultas SQL parametrizadas
+- ocultación de errores internos
+- aislamiento mediante variables de entorno
+
+---
+
+# Despliegue y mantenimiento
+
+## Build
+
+```bash
+npm run build
+```
+
+Genera:
+
+- `dist/`
+- `dist/en/`
+
+---
+
+## Desarrollo local
+
+```bash
+npm run dev
+```
+
+Frontend Vite local.
+
+---
+
+## Desarrollo con APIs
+
+```bash
+npx vercel dev
+```
+
+Permite probar:
+
+- `/api/contact`
+- `/api/og`
+
+---
+
+## Producción
+
+```bash
+npx vercel --prod
+```
+
+---
+
+# Variables de entorno
+
+El proyecto requiere variables externas para:
+
+- conexión Supabase
+- integración Resend
+- Telegram Bot API
+- Upstash Redis
+
+Consulta:
+
+```text
+.env.example
+```
+
+---
+
+# Mejoras futuras
+
+Posibles mejoras futuras:
+
+- autenticación server-side real
+- panel admin conectado a base de datos
+- integración captcha / Turnstile
+- analytics y observabilidad
+- testing automatizado
+- pipelines CI/CD
+- dashboard administrativo persistente
