@@ -4,6 +4,8 @@ Portfolio interactivo con estética cyber-brutalist, construido para producción
 
 **Producción:** [josmarypirela.dev](https://josmarypirela.dev)
 
+[![Mozilla Observatory A+](https://img.shields.io/badge/Mozilla__Observatory-A%2B__115%2F100-success?style=for-the-badge&logo=mozilla&logoColor=white)](https://observatory.mozilla.org/analyze/www.josmarypirela.dev)
+
 ![Vista previa del portfolio](public/portafolio-preview.png)
 
 ---
@@ -54,10 +56,10 @@ El proyecto está dividido en tres capas principales:
 Prioridades del sistema:
 
 - SEO
-- rendimiento
-- accesibilidad
-- modularidad
-- experiencia interactiva ligera
+- Rendimiento
+- Accesibilidad
+- Modularidad
+- Experiencia interactiva ligera
 
 ---
 
@@ -65,90 +67,18 @@ Prioridades del sistema:
 
 El proyecto implementa:
 
-- renderizado estático bilingüe
-- canonical URLs
-- hreflang
+- Renderizado estático bilingüe
+- Canonical URLs
+- Hreflang
 - Open Graph dinámico
-- sitemap y robots.txt
+- Sitemap y robots.txt
 
 ---
 
 ## Instalación local
 
 ```bash
-git clone https://github.com/josmarypirela/portfolio-v2.git
+git clone [https://github.com/josmarypirela/portfolio-v2.git](https://github.com/josmarypirela/portfolio-v2.git)
 cd portfolio-v2
 npm install
 npm run dev
-```
-
-El frontend estará disponible en `http://localhost:3000`.
-
-Para probar funciones API:
-
-```bash
-npx vercel dev
-```
-
----
-
-## Configuración mínima
-
-Copia `.env.example` a `.env` y define las variables necesarias.
-
-```bash
-cp .env.example .env
-```
-
-No almacenar credenciales en el repositorio.
-
----
-
-## Scripts útiles
-
-| Comando           | Descripción                 |
-| ----------------- | --------------------------- |
-| `npm run dev`     | Servidor de desarrollo Vite |
-| `npm run build`   | Genera `dist/` y `dist/en/` |
-| `npm run preview` | Vista previa del build      |
-| `npm run lint`    | TypeScript check            |
-
----
-
-## Objetivo del proyecto
-
-Este portfolio fue construido como una exploración de:
-
-- interfaces interactivas
-- arquitectura frontend moderna
-- SEO técnico avanzado
-- experiencias visuales ligeras
-- integración fullstack sobre infraestructura serverless
-
----
-
-## Licencia
-
-Uso personal y demostrativo.
-
----
-
-## Estructura de documentación
-
-| Documento          | Propósito                          |
-| ------------------ | ---------------------------------- |
-| `README.md`        | Entrada principal del proyecto     |
-| `DOCUMENTACION.md` | Arquitectura y decisiones técnicas |
-
----
-
-## Notas de despliegue
-
-- Vite maneja entradas `/` y `/en/`
-- OG dinámico generado en `/api/og`
-- API de contacto en `/api/contact`
-- Despliegue en Vercel
-
-```
-
-```
